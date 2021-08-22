@@ -149,7 +149,7 @@
 <p>Once the MQTT broker run successfully, we can go to setup the MQTT message source.<br>While using Moxa’s IoT gateway, we need to fill in the broker IP address, which should be your linux server IP address, and port 1883<br>SSL/TLS is not enabled in this demonstration.</p>
 <p><a target="_blank" rel="noopener" href="https://imgur.com/DOljVgV"><img src="https://i.imgur.com/DOljVgV.png" title="source: imgur.com" /></a></p>
 <p>The uploaded message content should follow a flat data schema in a json object format - property: value<br><a target="_blank" rel="noopener" href="https://imgur.com/opcJoRi"><img src="https://i.imgur.com/opcJoRi.png" title="source: imgur.com" /></a></p>
-<p>We can use tool like <a target="_blank" rel="noopener" href="https://mqttfx.jensd.de/">MQTT.fx</a> to subscribe to the topic which published by the MQTT message source.<br><a target="_blank" rel="noopener" href="https://imgur.com/fG5bymH"><img src="https://i.imgur.com/fG5bymH.png" title="source: imgur.com" /></a>a</p>
+<p>We can use tool like <a target="_blank" rel="noopener" href="https://mqttfx.jensd.de/">MQTT.fx</a> to subscribe to the topic which published by the MQTT message source.<br><a target="_blank" rel="noopener" href="https://imgur.com/fG5bymH"><img src="https://i.imgur.com/fG5bymH.png" title="source: imgur.com" /></a></p>
 <h2 id="Install-and-configure-Node-red"><a href="#Install-and-configure-Node-red" class="headerlink" title="Install and configure Node-red"></a>Install and configure Node-red</h2><p>Before we start to install node-red, we need to install nodejs and npm</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install nodejs npm</span><br></pre></td></tr></table></figure>
 
@@ -160,6 +160,19 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo npm install -g --unsafe-perm pm2</span><br><span class="line">pm2 start `which node-red` -- -v</span><br><span class="line">pm2 save</span><br><span class="line">pm2 startup</span><br></pre></td></tr></table></figure>
 
 <p>After you finish all the step above, you can login to the node-red web ui by the server-ip:3000<br><a target="_blank" rel="noopener" href="https://imgur.com/wTi4NBw"><img src="https://i.imgur.com/wTi4NBw.png" title="source: imgur.com" /></a></p>
+<p>Before we deep dive into the node introduction, let us have an overview of what we are going to do with Node-red<br>Starting from the left hand side, we need to have a MQTT client node to subscribe the data from MQTT broker.<br>The incoming message can be checked by using debug node, and you can see the data type of the message is ‘string’<br>We need to have a json component to convert the string data to a json object data.<br>In the right hand side, influxDB component save the incoming data from json node and save it to the InfluxDB</p>
+<p><a target="_blank" rel="noopener" href="https://imgur.com/cSVgHrM"><img src="https://i.imgur.com/cSVgHrM.png" title="source: imgur.com" /></a></p>
+<p>Let’s start from the ‘mqtt in’ node</p>
+<p>#Step1. Drag the ‘mqtt in’ node from the left node menu to the workplace and configure it.<br>Double click the node and start to edit the node configuration.<br>We will need to fill in the MQTT broker IP address, listen port, and other required setting</p>
+<p><a target="_blank" rel="noopener" href="https://imgur.com/gRND1d0"><img src="https://i.imgur.com/gRND1d0.png" title="source: imgur.com" /></a></p>
+<p>#Step2. Drag the ‘debug’ node from the left node menu to the workplace<br>link ‘mqtt in’ and ‘debug’ node together to pipe all the received MQTT message to the debug node.<br>click the debug message from the right menu and you can see all the messages which is in datatype string</p>
+<p><a target="_blank" rel="noopener" href="https://imgur.com/69X3rP3"><img src="https://i.imgur.com/69X3rP3.png" title="source: imgur.com" /></a></p>
+<p>#Step3. Drag the ‘json’ node from the left menu to the workpalce<br>link ‘mqtt in’ node and ‘json’ node together, so json node can convert all the incoming string type data to json format data<br>From the figure below, you can see all the datatype turn to json object from the debug message</p>
+<p><a target="_blank" rel="noopener" href="https://imgur.com/ZSJwiiq"><img src="https://i.imgur.com/ZSJwiiq.png" title="source: imgur.com" /></a></p>
+<p>#Step4. Install the node-red-contrib-influxdb from Manage palette<br>Go to Manage palette and search for node-red-contrib-influxdb and install it.</p>
+<p><a target="_blank" rel="noopener" href="https://imgur.com/wuuf8Ef"><img src="https://i.imgur.com/wuuf8Ef.png" title="source: imgur.com" /></a></p>
+<p>#Step5. Drag the ‘influxDB out’ node from the left menu to the workplace and configure it<br>link ‘json’ node and ‘influxDB out’ together, so influxDB node can save all the json data into database.<br>Double click the node and fill in the required configuration like bucket name, organization, server version<br>, and mearsurement. A token is required to successfuly connect to the influxDB.</p>
+<p>Since we don’t setup a influxDB yet, we can keep it and go back to setup the setting once we finish the influxDB setup</p>
 
       
     </div>
