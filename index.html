@@ -104,7 +104,8 @@
 <hr>
 <h2 id="2-Architecture-and-prerequisite"><a href="#2-Architecture-and-prerequisite" class="headerlink" title="2. Architecture and prerequisite"></a>2. Architecture and prerequisite</h2><p>In the demonstration, we will use Moxa UC series ARM-based embedded computer to generate system infomration (cpu/memory usage) and stream it to the MQTT Broker. This IoT gateway has the ability to convert OT data like Modbus TCP/RTU to MQTT/Azure/AWS. In this tutorial, we will only use the system status tags from gateway to simplify this demonstration.</p>
 <p>We will use this IoT gateway to send MQTT message to a MQTT broker. To do so, we need to install the Mosquitto MQTT broker.</p>
-<p>Grafana dashboard doesn’t come with native MQTT streaming data source. As the result, we plan to use influxDB as the data source.</p>
+<p>Grafana dashboard doesn’t come with native MQTT streaming data source. As the result, we plan to use influxDB as the data source. One of the benefit of having a database in between is to have a record for historical data.</p>
+<p>Further reading <a target="_blank" rel="noopener" href="https://github.com/grafana/mqtt-datasource">MQTT datasource from Grafana</a></p>
 <p>Node-red can ingest the MQTT message and write those data into influxDB. The benefits of using node-red is we don’t need to code anything, and we can just use the existing component to write MQTT data in json format of data to influxDB</p>
 <p>All the service I mentioned above can be installed locally in any private network on a Linux server, or you can install all the services on the virtual machine on the public cloud. During my demonstration, I will just deploy all the services on my virtual machine on Azure.</p>
 <p><a target="_blank" rel="noopener" href="https://imgur.com/p4e1mz4"><img src="https://i.imgur.com/p4e1mz4.png" title="source: imgur.com" /></a></p>
@@ -133,7 +134,7 @@
 <td>3000</td>
 </tr>
 </tbody></table>
-<h2 id="3-Install-and-configure-a-mosquitto-MQTT-broker"><a href="#3-Install-and-configure-a-mosquitto-MQTT-broker" class="headerlink" title="3. Install and configure a mosquitto MQTT broker"></a>3. Install and configure a mosquitto MQTT broker</h2><h3 id="3-1-Install-Mosquitto-MQTT-Broker"><a href="#3-1-Install-Mosquitto-MQTT-Broker" class="headerlink" title="3-1 Install Mosquitto MQTT Broker"></a>3-1 Install Mosquitto MQTT Broker</h3><p>In this step, we are going to install mosquitto MQTT broker.</p>
+<h2 id="3-Install-and-configure-a-Mosquitto-MQTT-broker"><a href="#3-Install-and-configure-a-Mosquitto-MQTT-broker" class="headerlink" title="3. Install and configure a Mosquitto MQTT broker"></a>3. Install and configure a Mosquitto MQTT broker</h2><h3 id="3-1-Install-Mosquitto-MQTT-Broker"><a href="#3-1-Install-Mosquitto-MQTT-Broker" class="headerlink" title="3-1 Install Mosquitto MQTT Broker"></a>3-1 Install Mosquitto MQTT Broker</h3><p>In this step, we are going to install mosquitto MQTT broker.</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install mosquitto</span><br><span class="line">sudo service mosquitto start</span><br></pre></td></tr></table></figure>
 
 <p>Check the mqtt broker run successfully</p>
@@ -144,7 +145,7 @@
 <p>The uploaded message content should follow a flat data schema in a json object format - property: value<br><a target="_blank" rel="noopener" href="https://imgur.com/opcJoRi"><img src="https://i.imgur.com/opcJoRi.png" title="source: imgur.com" /></a></p>
 <p>We can use tool like <a target="_blank" rel="noopener" href="https://mqttfx.jensd.de/">MQTT.fx</a> to subscribe to the topic which published by the MQTT message source.<br><a target="_blank" rel="noopener" href="https://imgur.com/fG5bymH"><img src="https://i.imgur.com/fG5bymH.png" title="source: imgur.com" /></a></p>
 <hr>
-<h2 id="4-Install-and-configure-Node-red"><a href="#4-Install-and-configure-Node-red" class="headerlink" title="4. Install and configure Node-red"></a>4. Install and configure Node-red</h2><h3 id="4-1-Install-nodejs-npm-and-node-red"><a href="#4-1-Install-nodejs-npm-and-node-red" class="headerlink" title="4-1 Install nodejs, npm and node-red"></a>4-1 Install nodejs, npm and node-red</h3><p>Before we start to install node-red, we need to install nodejs and npm</p>
+<h2 id="4-Install-and-configure-Node-red"><a href="#4-Install-and-configure-Node-red" class="headerlink" title="4. Install and configure Node-red"></a>4. Install and configure Node-red</h2><h3 id="4-1-Install-nodejs-npm-and-Node-red"><a href="#4-1-Install-nodejs-npm-and-Node-red" class="headerlink" title="4-1 Install nodejs, npm and Node-red"></a>4-1 Install nodejs, npm and Node-red</h3><p>Before we start to install node-red, we need to install nodejs and npm</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install nodejs npm</span><br></pre></td></tr></table></figure>
 
 <p>Then, we can start to install node-red.<br>To install it on the Ubuntu server hosted by Microsoft Azure<br>We follow the <a target="_blank" rel="noopener" href="https://nodered.org/docs/getting-started/azure">installation guide for Azure user</a></p>
@@ -170,10 +171,9 @@
 <p>Since we haven’t configured influxDB yet, we can keep the setting blank and go back to setup the setting once we finish the influxDB setup</p>
 <p><a target="_blank" rel="noopener" href="https://imgur.com/EENn9NP"><img src="https://i.imgur.com/EENn9NP.png" title="source: imgur.com" /></a></p>
 <hr>
-<h2 id="5-Install-and-configure-InfluxDB"><a href="#5-Install-and-configure-InfluxDB" class="headerlink" title="5. Install and configure InfluxDB"></a>5. Install and configure InfluxDB</h2><h3 id="5-1-Install-InfluxDB"><a href="#5-1-Install-InfluxDB" class="headerlink" title="5.1 Install InfluxDB"></a>5.1 Install InfluxDB</h3><p>Install the latest version 2.0 - <a target="_blank" rel="noopener" href="https://docs.influxdata.com/influxdb/v2.0/install">https://docs.influxdata.com/influxdb/v2.0/install</a></p>
+<h2 id="5-Install-and-configure-InfluxDB"><a href="#5-Install-and-configure-InfluxDB" class="headerlink" title="5. Install and configure InfluxDB"></a>5. Install and configure InfluxDB</h2><h3 id="5-1-Install-InfluxDB"><a href="#5-1-Install-InfluxDB" class="headerlink" title="5.1 Install InfluxDB"></a>5.1 Install InfluxDB</h3><p>Follow the <a target="_blank" rel="noopener" href="https://docs.influxdata.com/influxdb/v2.0/install">guide</a> from InfluxDB and install the latest version 2.0</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">wget https://dl.influxdata.com/influxdb/releases/influxdb2-2.0.7-amd64.deb</span><br><span class="line">sudo dpkg -i influxdb2-2.0.7-amd64.deb</span><br><span class="line">sudo service influxdb start</span><br><span class="line">sudo service influxdb status</span><br></pre></td></tr></table></figure>
-
-<p>You should see the influxdb service status running<br>Then, login to the linux console and start to setup the influxDB database</p>
+<p>Once the installation has been done. You should see the influxdb service status running. Then, login to the linux console and start to setup the influxDB database</p>
 <h3 id="5-2-Setup-InfluxDB-and-get-the-token"><a href="#5-2-Setup-InfluxDB-and-get-the-token" class="headerlink" title="5.2 Setup InfluxDB and get the token"></a>5.2 Setup InfluxDB and get the token</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">influx setup</span><br></pre></td></tr></table></figure>
 <p>Input the user name, password, organization name, bucket name</p>
 <p><a target="_blank" rel="noopener" href="https://imgur.com/BficC9e"><img src="https://i.imgur.com/BficC9e.png" title="source: imgur.com" /></a></p>
@@ -193,7 +193,7 @@
 <p><a target="_blank" rel="noopener" href="https://imgur.com/iUDbQHc"><img src="https://i.imgur.com/iUDbQHc.png" title="source: imgur.com" /></a></p>
 <h3 id="6-3-Create-the-dashboard"><a href="#6-3-Create-the-dashboard" class="headerlink" title="6.3 Create the dashboard"></a>6.3 Create the dashboard</h3><p>Start to create the dashboard and ‘add an empty panel’</p>
 <p><a target="_blank" rel="noopener" href="https://imgur.com/4CfU02N"><img src="https://i.imgur.com/4CfU02N.png" title="source: imgur.com" /></a></p>
-<p>We will need to modify the influx query to get the desired data displayed on the dashboard.We can select the simple query example and change the parameters inside the query. In this case, we need to change the bucket name and measurement name</p>
+<p>We will need to modify the influx query to get the desired data displayed on the dashboard. We can select the simple query example and change the parameters inside the query. In this case, we need to change the bucket name and measurement name</p>
 <p><a target="_blank" rel="noopener" href="https://imgur.com/lQLk3Zs"><img src="https://i.imgur.com/lQLk3Zs.png" title="source: imgur.com" /></a></p>
 <p>Finally, we can get a dashboard like below to have line chart and gauage to represent data.</p>
 <p><a target="_blank" rel="noopener" href="https://imgur.com/d7FBRQq"><img src="https://i.imgur.com/d7FBRQq.png" title="source: imgur.com" /></a></p>
