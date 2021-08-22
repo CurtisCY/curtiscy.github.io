@@ -140,7 +140,7 @@
 <td>3000</td>
 </tr>
 </tbody></table>
-<h2 id="Install-and-configure-a-mosquitto-MQTT-broker"><a href="#Install-and-configure-a-mosquitto-MQTT-broker" class="headerlink" title="Install and configure a mosquitto MQTT broker"></a>Install and configure a mosquitto MQTT broker</h2><p>In this step, we will need to install mosquitto MQTT broker.</p>
+<h2 id="3-Install-and-configure-a-mosquitto-MQTT-broker"><a href="#3-Install-and-configure-a-mosquitto-MQTT-broker" class="headerlink" title="3. Install and configure a mosquitto MQTT broker"></a>3. Install and configure a mosquitto MQTT broker</h2><p>In this step, we will need to install mosquitto MQTT broker.</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install mosquitto</span><br><span class="line">sudo service mosquitto start</span><br></pre></td></tr></table></figure>
 
 <p>Check the mqtt broker run successfully</p>
@@ -150,7 +150,7 @@
 <p><a target="_blank" rel="noopener" href="https://imgur.com/DOljVgV"><img src="https://i.imgur.com/DOljVgV.png" title="source: imgur.com" /></a></p>
 <p>The uploaded message content should follow a flat data schema in a json object format - property: value<br><a target="_blank" rel="noopener" href="https://imgur.com/opcJoRi"><img src="https://i.imgur.com/opcJoRi.png" title="source: imgur.com" /></a></p>
 <p>We can use tool like <a target="_blank" rel="noopener" href="https://mqttfx.jensd.de/">MQTT.fx</a> to subscribe to the topic which published by the MQTT message source.<br><a target="_blank" rel="noopener" href="https://imgur.com/fG5bymH"><img src="https://i.imgur.com/fG5bymH.png" title="source: imgur.com" /></a></p>
-<h2 id="Install-and-configure-Node-red"><a href="#Install-and-configure-Node-red" class="headerlink" title="Install and configure Node-red"></a>Install and configure Node-red</h2><p>Before we start to install node-red, we need to install nodejs and npm</p>
+<h2 id="4-Install-and-configure-Node-red"><a href="#4-Install-and-configure-Node-red" class="headerlink" title="4. Install and configure Node-red"></a>4. Install and configure Node-red</h2><p>Before we start to install node-red, we need to install nodejs and npm</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install nodejs npm</span><br></pre></td></tr></table></figure>
 
 <p>Then, we can start to install node-red.<br>To install it on the Ubuntu server hosted by Microsoft Azure<br>We follow the [step-by-step instruction for azure] (<a target="_blank" rel="noopener" href="https://nodered.org/docs/getting-started/azure">https://nodered.org/docs/getting-started/azure</a>)</p>
@@ -172,7 +172,19 @@
 <p>#Step4. Install the node-red-contrib-influxdb from Manage palette<br>Go to Manage palette and search for node-red-contrib-influxdb and install it.</p>
 <p><a target="_blank" rel="noopener" href="https://imgur.com/wuuf8Ef"><img src="https://i.imgur.com/wuuf8Ef.png" title="source: imgur.com" /></a></p>
 <p>#Step5. Drag the ‘influxDB out’ node from the left menu to the workplace and configure it<br>link ‘json’ node and ‘influxDB out’ together, so influxDB node can save all the json data into database.<br>Double click the node and fill in the required configuration like bucket name, organization, server version<br>, and mearsurement. A token is required to successfuly connect to the influxDB.</p>
-<p>Since we don’t setup a influxDB yet, we can keep it and go back to setup the setting once we finish the influxDB setup</p>
+<p>Since we haven’t configured influxDB yet, we can keep the setting blank and go back to setup the setting once we finish the influxDB setup</p>
+<p><a target="_blank" rel="noopener" href="https://imgur.com/EENn9NP"><img src="https://i.imgur.com/EENn9NP.png" title="source: imgur.com" /></a></p>
+<h2 id="5-Install-and-configure-InfluxDB"><a href="#5-Install-and-configure-InfluxDB" class="headerlink" title="5. Install and configure InfluxDB"></a>5. Install and configure InfluxDB</h2><p>Install the latest version 2.0 - <a target="_blank" rel="noopener" href="https://docs.influxdata.com/influxdb/v2.0/install">https://docs.influxdata.com/influxdb/v2.0/install</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">wget https://dl.influxdata.com/influxdb/releases/influxdb2-2.0.7-amd64.deb</span><br><span class="line">sudo dpkg -i influxdb2-2.0.7-amd64.deb</span><br><span class="line">sudo service influxdb start</span><br><span class="line">sudo service influxdb status</span><br></pre></td></tr></table></figure>
+
+<p>You should see the influxdb service status running<br>Then, login to the linux console and start to setup the influxDB database</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">influx setup</span><br></pre></td></tr></table></figure>
+<p>Input the user name, password, organization name, bucket name</p>
+<p><a target="_blank" rel="noopener" href="https://imgur.com/BficC9e"><img src="https://i.imgur.com/BficC9e.png" title="source: imgur.com" /></a></p>
+<p>For the influxDB token, you can get it by using the command below</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">influx auth list</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://imgur.com/MyfF5D1"><img src="https://i.imgur.com/MyfF5D1.png" title="source: imgur.com" /></a></p>
 
       
     </div>
