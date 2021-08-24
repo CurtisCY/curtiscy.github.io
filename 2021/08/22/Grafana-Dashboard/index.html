@@ -33,7 +33,7 @@
 <meta property="og:image" content="https://i.imgur.com/lQLk3Zs.png">
 <meta property="og:image" content="https://i.imgur.com/d7FBRQq.png">
 <meta property="article:published_time" content="2021-08-21T16:37:00.000Z">
-<meta property="article:modified_time" content="2021-08-24T07:56:58.018Z">
+<meta property="article:modified_time" content="2021-08-24T08:02:27.844Z">
 <meta property="article:author" content="Curtis CY Huang">
 <meta property="article:tag" content="Web, Linux, iot">
 <meta name="twitter:card" content="summary">
@@ -191,7 +191,8 @@
 <h3 id="4-5-Install-the-node-red-contrib-influxdb-from-Manage-palette"><a href="#4-5-Install-the-node-red-contrib-influxdb-from-Manage-palette" class="headerlink" title="4-5. Install the node-red-contrib-influxdb from Manage palette"></a>4-5. Install the node-red-contrib-influxdb from Manage palette</h3><p>Go to Manage palette and search for node-red-contrib-influxdb and install it.</p>
 <p><a target="_blank" rel="noopener" href="https://imgur.com/wuuf8Ef"><img src="https://i.imgur.com/wuuf8Ef.png" title="source: imgur.com" /></a></p>
 <h3 id="4-6-Drag-the-‘influxDB-out’-node-from-the-left-menu-to-the-workplace-and-configure-it"><a href="#4-6-Drag-the-‘influxDB-out’-node-from-the-left-menu-to-the-workplace-and-configure-it" class="headerlink" title="4-6. Drag the ‘influxDB out’ node from the left menu to the workplace and configure it"></a>4-6. Drag the ‘influxDB out’ node from the left menu to the workplace and configure it</h3><p>link ‘json’ node and ‘influxDB out’ together, so influxDB node can save all the json data into database. Double click the node and fill in the required configuration like bucket name, organization, server version, and mearsurement. A token is required to successfuly connect to the influxDB.</p>
-<p>Since we haven’t configured influxDB yet, we can keep the setting blank and go back to setup the setting once we finish the influxDB setup</p>
+<p>Since we haven’t configured influxDB yet, we can keep the setting blank and go back to setup the setting once we finish the influxDB setup. InfluxDB setup is covered in next chapter 5 - Install and configure InfluxDB</p>
+<p><em>In this tutorial, we are using InfluxDB version 2.0</em></p>
 <p><a target="_blank" rel="noopener" href="https://imgur.com/EENn9NP"><img src="https://i.imgur.com/EENn9NP.png" title="source: imgur.com" /></a></p>
 <hr>
 <h2 id="5-Install-and-configure-InfluxDB"><a href="#5-Install-and-configure-InfluxDB" class="headerlink" title="5. Install and configure InfluxDB"></a>5. Install and configure InfluxDB</h2><h3 id="5-1-Install-InfluxDB"><a href="#5-1-Install-InfluxDB" class="headerlink" title="5.1 Install InfluxDB"></a>5.1 Install InfluxDB</h3><p>Follow the <a target="_blank" rel="noopener" href="https://docs.influxdata.com/influxdb/v2.0/install">guide</a> from InfluxDB and install the latest version 2.0</p>
@@ -219,7 +220,7 @@
 <p>We will need to modify the influx query to get the desired data displayed on the dashboard. We can select the simple query example and change the parameters inside the query. In this case, we need to change the bucket name and measurement name</p>
 <p>Further reading - <a target="_blank" rel="noopener" href="https://docs.influxdata.com/influxdb/v2.0/query-data/">influx query</a></p>
 <p><a target="_blank" rel="noopener" href="https://imgur.com/lQLk3Zs"><img src="https://i.imgur.com/lQLk3Zs.png" title="source: imgur.com" /></a></p>
-<p>Finally, we can get a dashboard like below to have line chart and gauage to represent data.</p>
+<p>Finally, we can get a dashboard like below to have line chart and gauage to represent data. Don’t forget to save the dashboard before you exit this page. For the gauage, you will need to setup minimum and maximum value of the data and the threshold value for the gauage.</p>
 <p><a target="_blank" rel="noopener" href="https://imgur.com/d7FBRQq"><img src="https://i.imgur.com/d7FBRQq.png" title="source: imgur.com" /></a></p>
 <hr>
 
